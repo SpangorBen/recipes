@@ -24,6 +24,9 @@ use App\Http\Controllers\RecipeController;
 
 // Route::post('/' , [CategoryController::class, 'store']);
 
-Route::get('/', [RecipeController::class, 'index']);
+Route::get('/', [RecipeController::class, 'index'])->name('welcome');
 
 Route::post('/', [RecipeController::class, 'store']);
+
+Route::get('/recipes/{recipe}/edit', [RecipeController::class, 'edit'])->name('edit');
+Route::put('/recipes/{recipe}', [RecipeController::class, 'update'])->name('update');
