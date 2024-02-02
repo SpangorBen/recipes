@@ -13,9 +13,10 @@
 </head>
 
 <body>
-    @yield('crud')
+    {{-- @yield('crud') --}}
     {{-- @yield('admin.add-recipe') --}}
-    @yield('content')
-    @yield('script')
+    {{-- @yield('content') --}}
+    @yield('dash')
+    {{-- @yield('script') --}}
 </body>
 </html>

@@ -1,19 +1,9 @@
 @extends('layer')
-@section('title')
-    Welcome
-@endsection
+{{-- @section('title')
+    Dashboard
+@endsection --}}
 
-{{-- @section('content') --}}
-<!-- component -->
-{{-- Table --}}
-
-{{-- @extends('crud') --}}
-{{-- @extends('dashboard') --}}
-
-{{-- Table --}}
-
-{{-- @endsection --}}
-@section('dash')
+@section('dasdh')
 <!-- <div class="bg-gray-900 min-h-screen flex items-center justify-center" style="background-image:linear-gradient(315deg, #ff6ac1 0%, #7868e6 74%);"> -->
 <div class="bg-gray-900 min-h-screen flex items-center justify-center" style="background-image: url(pics/bgfood.jpg); background-position:center; background-repeat:no-repeat; background-size:cover">
 
