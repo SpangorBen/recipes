@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->float('prep_time');
-            $table->json('ingredients');
+            $table->string('ingredients');
             $table->string('description');
+            $table->string('image');
             $table->foreignId('categories_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });

@@ -1,4 +1,4 @@
-@extends('layer')
+{{-- @extends('layer')
 {{-- @section('title')
     Dashboard
 @endsection --}}
@@ -82,10 +82,11 @@
           <img class="w-20 h-20 object-cover object-center rounded-full" src="https://images.unsplash.com/photo-1547592180-85f173990554?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80" alt="cuisine" />
           <h4 class="text-white text-2xl font-bold capitalize text-center"><a href="">{{$item->name}}</a></h4>
           <p class="text-white/50"> {{$item->ingredients}}</p>
-          <p class="absolute top-2 text-white inline-flex items-center text-xs"> New Recipe <span class="ml-2 w-2 h-2 block bg-green-500 rounded-full group-hover:animate-pulse"></span></p>
-          <div class="flex gap-2 pt-2 text-white">
-            <a href="" class="delete-button">
-              delete
+          <p class="absolute top-2 text-white inline-flex items-center text-xs"> NeWw Recipe <span class="ml-2 w-2 h-2 block bg-green-500 rounded-full group-hover:animate-pulse"></span></p>
+          <p>delete</p>
+          <div class="flex gap-2 pt-2 text-black">
+              <a href="" class="delete-button">
+                delete
                 <svg class="delete-svgIcon" viewBox="0 0 448 512">
                   <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path>
                 </svg>
@@ -216,4 +217,4 @@
     }
 </script>
 
-@endsection
+@endsection --}}

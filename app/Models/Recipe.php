@@ -14,6 +14,11 @@ class Recipe extends Model
         'prep_time',
         'ingredients',
         'description',
-        'category_id'
+        'category_id',
+        'image'
     ];
+
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
 }

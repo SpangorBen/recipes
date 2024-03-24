@@ -39,14 +39,22 @@ class RecipeController extends Controller
             'prep_time' => 'required|integer',
             'ingredients' => 'required|string',
             'category' => 'required|exists:categories,id',
+            // 'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $recipe = new Recipe;
+
+        $imageName = time() . '.' . $request->image->extension();
+        $imageUrl = $request->file('image')->storeAs('public/pics', $imageName);
+
         $recipe->name = $request->name;
         $recipe->description = $request->description;
         $recipe->prep_time = $request->prep_time;
         $recipe->ingredients = $request->ingredients;
         $recipe->categories_id = $request->category;
+        if (isset($imageUrl)) {
+            $recipe->image = $imageName;
+        }
         $recipe->save();
 
         return redirect()->route('welcome');
@@ -89,7 +97,7 @@ class RecipeController extends Controller
         $recipe->categories_id = $request->category;
         $recipe->save();
 
-        return redirect()->route('recipes.index')->with('success', 'Recipe updated successfully');
+        return redirect()->route('welcome')->with('success', 'Recipe updated successfully');
     }
 
     /**
@@ -99,6 +107,20 @@ class RecipeController extends Controller
     {
         $recipe->delete();
 
-        return redirect()->route('recipes.index')->with('success', 'Recipe deleted successfully');
+        return redirect()->route('welcome')->with('success', 'Recipe deleted successfully');
+    }
+
+    public function search(Request $request){
+        $query = $request->input('query');
+        $categories = Category::all();
+
+        $recipes = Recipe::where('name', 'like', '%'.$query.'%')
+                        ->orWhere('description', 'like', '%'.$query.'%')
+                        ->get();
+    
+        if(!$query){
+            return $this->index();
+        }
+        return view('welcome', compact('recipes', 'query', 'categories'));
     }
 }

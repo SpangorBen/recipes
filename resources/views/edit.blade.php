@@ -1,89 +1,60 @@
 @extends('layer')
 
 @section('edit')
-<!-- component -->
-<div class="flex justify-center items-center w-screen h-screen bg-white">
-	<!-- COMPONENT CODE -->
-	<div class="container mx-auto my-4 px-4 lg:px-20">
 
-		<div class="w-full p-8 my-4 md:px-12 lg:w-9/12 lg:pl-20 lg:pr-40 mr-auto rounded-2xl shadow-2xl">
-			<div class="flex">
-				<h1 class="font-bold uppercase text-5xl">Send us a <br /> message</h1>
-			</div>
-			<form action="{{route('update',$recipe)}}" method="POST" class="grid grid-cols-1 gap-5 md:grid-cols-2 mt-5">
-                @csrf
-                @method('PUT')
-				<input class="w-full bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
-            type="text" placeholder="First Name*" />
-				<input class="w-full bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
-            type="text" placeholder="Last Name*" />
-				<input class="w-full bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
-            type="email" placeholder="Email*" />
-				<input class="w-full bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
-            type="number" placeholder="Phone*" />
-            </form>
-				<div class="my-4">
-					<textarea placeholder="Message*" class="w-full h-32 bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"></textarea>
-				</div>
-				<div class="my-2 w-1/2 lg:w-1/4">
-					<button class="uppercase text-sm font-bold tracking-wide bg-blue-900 text-gray-100 p-3 rounded-lg w-full 
-                      focus:outline-none focus:shadow-outline">
-            Send Message
-          </button>
-				</div>
-			</div>
 
-			<div
-				class="w-full lg:-mt-96 lg:w-2/6 px-8 py-12 ml-auto bg-blue-900 rounded-2xl">
-				<div class="flex flex-col text-white">
-					<h1 class="font-bold uppercase text-4xl my-4">Drop in our office</h1>
-					<p class="text-gray-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-						tincidunt arcu diam,
-						eu feugiat felis fermentum id. Curabitur vitae nibh viverra, auctor turpis sed, scelerisque ex.
-					</p>
-
-					<div class="flex my-4 w-2/3 lg:w-1/2">
-						<div class="flex flex-col">
-							<i class="fas fa-map-marker-alt pt-2 pr-2" />
-            </div>
-            <div class="flex flex-col">
-              <h2 class="text-2xl">Main Office</h2>
-              <p class="text-gray-400">5555 Tailwind RD, Pleasant Grove, UT 73533</p>
-            </div>
+<div id="Add" tabindex="-1" class="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-10%] p-5 w-full rounded-md shadow-sm z-50 ">
+  <div class="relative p-4 w-full max-w-md max-h-full">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <!-- Modal header -->
+          <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                  Recipe
+              </h3>
+              <button type="button" onclick="closeMyPopup()" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
+                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                  </svg>
+                  <span class="sr-only">Close modal</span>
+              </button>
           </div>
-          
-          <div class="flex my-4 w-2/3 lg:w-1/2">
-            <div class="flex flex-col">
-              <i class="fas fa-phone-alt pt-2 pr-2" />
+          <!-- Modal body -->
+          <form action="{{route('update',$recipe)}}" method="POST">@csrf @method('PUT')
+            <div class="grid gap-4 mb-4 sm:grid-cols-2 p-4">
+                <div>
+                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                    <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="{{$recipe->name}}" required="">
+                </div>
+                <div>
+                    <label for="brand" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">prep_time</label>
+                    <input type="number" value="{{$recipe->prep_time}}" name="prep_time" id="brand" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"  required="">
+                </div>
+                <div>
+                    <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ingredients</label>
+                    <input type="string" value="{{$recipe->ingredients}}" name="ingredients" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"  required="">
+                </div>
+                <div><label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
+                  <select name="category" id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    <option selected="" hidden>Category</option>
+                    @foreach ($categories as $item)
+                        <option value="{{$item->id}}" {{ $item->id == $recipe->categories_id ? 'selected' : '' }}>{{$item->title}}</option>
+                    @endforeach
+                  </select>
+                </div>
+                <div class="sm:col-span-2"><label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                  <textarea id="description" name="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Write product description here">{{$recipe->description}}</textarea></div>
             </div>
-            <div class="flex flex-col">
-              <h2 class="text-2xl">Call Us</h2>
-              <p class="text-gray-400">Tel: xxx-xxx-xxx</p>
-              <p class="text-gray-400">Fax: xxx-xxx-xxx</p>
-            </div>
-          </div>
-          
-          <div class="flex my-4 w-2/3 lg:w-1/2">
-            <a href="https://www.facebook.com/ENLIGHTENEERING/" target="_blank" rel="noreferrer" class="rounded-full bg-white h-8 w-8 inline-block mx-1 text-center pt-1">
-              <i class="fab fa-facebook-f text-blue-900" />
-            </a>
-            <a href="https://www.linkedin.com/company/enlighteneering-inc-" target="_blank" rel="noreferrer" class="rounded-full bg-white h-8 w-8 inline-block mx-1 text-center pt-1">
-              <i class="fab fa-linkedin-in text-blue-900" />
-            </a>
-          </div>
-        </div>
+            <button type="submit" class="text-black inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                Edit recipe
+            </button>
+        </form>
       </div>
-    </div>
-    <!-- COMPONENT CODE -->
-</div>
-
-<!-- BUY ME A PIZZA AND HELP SUPPORT OPEN-SOURCE RESOURCES -->
-<div class="flex items-end justify-end fixed bottom-0 right-0 mb-4 mr-4 z-10">
-  <div>
-    <a title="Buy me a pizza" href="https://www.buymeacoffee.com/Dekartmc" target="_blank" class="block w-16 h-16 rounded-full transition-all shadow hover:shadow-lg transform hover:scale-110 hover:rotate-12">
-      <img class="object-cover object-center w-full h-full rounded-full" src="https://img.icons8.com/emoji/48/000000/pizza-emoji.png"/>
-    </a>
   </div>
 </div>
+
 
 @endsection

@@ -1,6 +1,98 @@
 @extends('layer')
+@section('style')
+<style>
+
+  .delete-button, .edit-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgb(20, 20, 20);
+    border: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+    cursor: pointer;
+    transition-duration: 0.3s;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .delete-svgIcon, .edit-svgIcon {
+    width: 15px;
+    transition-duration: 0.3s;
+  }
+
+  .delete-svgIcon, .edit-svgIcon path {
+    fill: white;
+  }
+
+  .delete-button:hover {
+    width: 90px;
+    border-radius: 50px;
+    transition-duration: 0.3s;
+    background-color: rgb(255, 69, 69);
+    align-items: center;
+  }
+
+  .edit-button:hover {
+    width: 90px;
+    border-radius: 50px;
+    transition-duration: 0.3s;
+    background-color: #054C78;
+    align-items: center;
+  }
+  .delete-button:hover .delete-svgIcon {
+    width: 20px;
+    transition-duration: 0.3s;
+    transform: translateY(60%);
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+
+  .edit-button:hover .edit-svgIcon {
+    width: 20px;
+    transition-duration: 0.3s;
+    transform: translateY(60%);
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+
+  .delete-button::before{
+    display: none;
+    content: "Delete";
+    color: white;
+    transition-duration: 0.3s;
+    font-size: 2px;
+  }
+
+  .edit-button::before{
+    display: none;
+    content: "Edit";
+    color: white;
+    transition-duration: 0.3s;
+    font-size: 2px;
+  }
+
+  .delete-button:hover::before, .edit-button:hover::before{
+    display: block;
+    padding-right: 10px;
+    font-size: 13px;
+    opacity: 1;
+    transform: translateY(0px);
+    transition-duration: 0.3s;
+  }
+</style>
+@endsection
 @section('title')
-    Welcome
+Welcome
 @endsection
 
 {{-- @section('content') --}}
@@ -60,7 +152,12 @@
     <!-- Content -->
     <div class="flex-1 px-2 sm:px-0">
       <div class="flex justify-between items-center">
-        <h3 class="text-3xl font-extralight text-white/50">Recipes</h3>
+        <h3 class="text-3xl font-extralight text-white/50">
+          <form action="{{route('search')}}" method="GET">
+            <input class="text-black" type="text" name="query" placeholder="Search recipes...">
+            <button type="submit">Search Recipes</button>
+        </form></h3>
+
         <div class="inline-flex items-center space-x-2">
           <a class="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover" href="#">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -84,29 +181,33 @@
           <a class="text-white/50 group-hover:text-white group-hover:smooth-hover text-center" href="#" onclick="openMyPopup()">Add Category</a>
         </div>
 
-        <!-- Wikis Display -->
+        <!-- Recipes Display -->
 
         @foreach ($recipes as $item)
           
         <div class="relative group bg-gray-900/80 py-10 sm:py-12 px-4 flex flex-col space-y-2 items-center cursor-pointer rounded-md hover:bg-[#FF5516]/80 hover:smooth-hover">
-          <img class="w-20 h-20 object-cover object-center rounded-full" src="https://images.unsplash.com/photo-1547592180-85f173990554?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80" alt="cuisine" />
+          <img class="w-20 h-20 object-cover object-center rounded-full" src="{{asset('storage/pics/' . $item->image)}}" alt="{{$item->image}}" />
           <h4 class="text-white text-2xl font-bold capitalize text-center"><a href="">{{$item->name}}</a></h4>
           <p class="text-white/50"> {{$item->ingredients}}</p>
           <p class="absolute top-2 text-white inline-flex items-center text-xs"> New Recipe <span class="ml-2 w-2 h-2 block bg-green-500 rounded-full group-hover:animate-pulse"></span></p>
           <div class="flex gap-2 pt-2">
-            <a href="" class="delete-button">
+            <form action="{{route('destroy',$item->id)}}" method="POST">
+
+              @csrf @method('DELETE')
+              <button type="submit" class="delete-button text-white">
                 <svg class="delete-svgIcon" viewBox="0 0 448 512">
                   <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path>
                 </svg>
-              </a>
-              <button class="edit-button" onclick="openEdit('')">
-                <svg class="edit-svgIcon" viewBox="0 0 512 512">
-                  <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"></path>
-                </svg>
               </button>
-            </div>
-            
+            </form>
+            <a href="{{route('edit',$item->id)}}" class="edit-button">
+              <svg class="edit-svgIcon" viewBox="0 0 512 512">
+                <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"></path>
+              </svg>
+            </a>
           </div>
+            
+        </div>
         @endforeach
       </div>
     </div>
@@ -114,7 +215,7 @@
 </div>
 
 
-<!-- Add Categroy -->
+<!-- Add Recipe -->
 <div id="Add" tabindex="-1" aria-hidden="true" class="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-10%] p-5 w-full rounded-md shadow-sm z-50 hidden">
     <div class="relative p-4 w-full max-w-md max-h-full">
         <!-- Modal content -->
@@ -132,7 +233,7 @@
                 </button>
             </div>
             <!-- Modal body -->
-            <form action="{{url('/')}}" method="POST">@csrf
+            <form action="{{url('/')}}" method="POST" enctype="multipart/form-data">@csrf
               <div class="grid gap-4 mb-4 sm:grid-cols-2 p-4">
                   <div>
                       <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
@@ -144,7 +245,11 @@
                   </div>
                   <div>
                       <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ingredients</label>
-                      <input type="json" name="ingredients" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="..." required="">
+                      <input type="text" name="ingredients" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="..." required="">
+                  </div>
+                  <div>
+                    <label for="image" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image</label>
+                    <input type="file" name="image" id="image" accept="image/*" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                   </div>
                   <div><label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label><select name="category" id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                       <option selected="">Select category</option>
@@ -166,61 +271,12 @@
     </div>
 </div>
 
-<!-- Edit Category -->
-<div id="Edit" tabindex="-1" aria-hidden="true" class="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-10%] p-5 w-full rounded-md shadow-sm z-50 hidden">
-    <div class="relative p-4 w-full max-w-md max-h-full">
-        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                    Edit Category
-                </h3>
-                <button type="button" onclick="closeEdit()" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <form action="dashboard/editCategory" method="post" class="p-4 md:p-5">
-                <div class="grid gap-4 mb-4 grid-cols-2">
-                    <div class="col-span-2">
-                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category ID</label>
-                        <input type="text" name="catId" id="catId" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Category ID" required>
-                    </div>
-                    <div class="col-span-2">
-                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category New Name</label>
-                        <input type="text" name="title" id="modTitle" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type New Category name" required>
-                    </div>
-                    <div class="col-span-2">
-                        <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category New Description</label>
-                        <textarea id="modDescription" name="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Type New Category Description" required></textarea>                    
-                    </div>
-                </div>
-                <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                    Edit category
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-
-
 <script>
     function openMyPopup() {
         document.getElementById('Add').style.display = 'block';
     }
     function closeMyPopup() {
         document.getElementById('Add').style.display = 'none';
-    }
-    function openEdit(id, title, description) {
-        document.getElementById('catId').value = id;
-        document.getElementById('modTitle').value = title;
-        document.getElementById('modDescription').value = description;
-        document.getElementById('Edit').style.display = 'block';
-    }
-    function closeEdit() {
-        document.getElementById('Edit').style.display = 'none';
     }
 </script>
 
